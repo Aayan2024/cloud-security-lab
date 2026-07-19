@@ -1,0 +1,54 @@
+<svg viewBox="0 0 960 480" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8a1f1f"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="480" fill="#ffffff"/>
+
+  <text x="480" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#111111">IAM Privilege Escalation Path — PassRole + EC2 RunInstances</text>
+  <text x="480" y="60" text-anchor="middle" font-size="13" fill="#666666">Pattern flagged by scripts/iam-privesc-scan.py</text>
+
+  <!-- Low-priv user -->
+  <circle cx="140" cy="200" r="50" fill="#3d5a99"/>
+  <text x="140" y="196" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">low-priv</text>
+  <text x="140" y="212" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">IAM user</text>
+
+  <!-- iam:PassRole + ec2:RunInstances -->
+  <rect x="290" y="155" width="230" height="90" rx="10" fill="#a1683a"/>
+  <text x="405" y="185" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">Granted permissions</text>
+  <text x="405" y="205" text-anchor="middle" font-size="11" fill="#f2e2d3">iam:PassRole</text>
+  <text x="405" y="221" text-anchor="middle" font-size="11" fill="#f2e2d3">ec2:RunInstances</text>
+  <text x="405" y="237" text-anchor="middle" font-size="10" fill="#f2e2d3">(on Resource: *)</text>
+
+  <!-- EC2 instance with privileged role -->
+  <rect x="580" y="155" width="230" height="90" rx="10" fill="#7f4d9e"/>
+  <text x="695" y="185" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">EC2 instance launched</text>
+  <text x="695" y="205" text-anchor="middle" font-size="11" fill="#ecdcf5">with attached role:</text>
+  <text x="695" y="223" text-anchor="middle" font-size="11" font-weight="700" fill="#ecdcf5">AdminInstanceProfile</text>
+
+  <!-- Admin access -->
+  <rect x="820" y="155" width="120" height="90" rx="10" fill="#1F3864"/>
+  <text x="880" y="192" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Effective</text>
+  <text x="880" y="210" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Admin</text>
+  <text x="880" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Access</text>
+
+  <line x1="190" y1="200" x2="290" y2="200" stroke="#8a1f1f" stroke-width="2.5" marker-end="url(#arr)"/>
+  <line x1="520" y1="200" x2="580" y2="200" stroke="#8a1f1f" stroke-width="2.5" marker-end="url(#arr)"/>
+  <text x="550" y="188" text-anchor="middle" font-size="10.5" fill="#8a1f1f">launch + pass role</text>
+  <line x1="810" y1="200" x2="820" y2="200" stroke="#8a1f1f" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- SSH/SSM callout -->
+  <rect x="580" y="270" width="230" height="60" rx="8" fill="#eef1f8" stroke="#c7d1e6" stroke-width="1"/>
+  <text x="695" y="293" text-anchor="middle" font-size="11" fill="#33415e">Attacker connects via SSM/SSH,</text>
+  <text x="695" y="310" text-anchor="middle" font-size="11" fill="#33415e">queries the instance metadata service</text>
+  <line x1="695" y1="245" x2="695" y2="270" stroke="#777777" stroke-width="2" stroke-dasharray="3,3"/>
+
+  <!-- Remediation box -->
+  <rect x="90" y="360" width="770" height="90" rx="8" fill="#f4f8ef" stroke="#a3c17a" stroke-width="1.5"/>
+  <text x="110" y="382" font-size="12.5" font-weight="700" fill="#3a5f1f">Remediation (from remediation-report-template.md)</text>
+  <text x="110" y="401" font-size="11" fill="#3a5f1f">- Scope iam:PassRole to specific role ARNs, not "*"</text>
+  <text x="110" y="417" font-size="11" fill="#3a5f1f">- Add a PassRole Condition restricting which service can assume the role (iam:PassedToService)</text>
+  <text x="110" y="433" font-size="11" fill="#3a5f1f">- Remove ec2:RunInstances from users who don't need to launch infrastructure</text>
+</svg>
